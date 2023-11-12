@@ -46,4 +46,3 @@ git clone https://github.com/JONHYOJIN/Gaining-Territory.git
 ```python
 python main.py
 ```
-commit test
