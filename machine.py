@@ -42,7 +42,23 @@ class MACHINE():
                 #if(self.check_triangle(temp_line)):
                 #    return temp_line
         
-        if len(self.posible_lines) > 10:    # game 전략 1 : 가능한 선분 수가 10개 이상이면 1) 삼각형 check 2) 독립선분 긋기 3) min-max
+        if len(self.whole_points) ==4:
+            #독립선분 긋기 --> DFS 완전탐색, 시간 이슈 발생 
+            simul_line_set = self.drawn_lines # 20개의 독립 선분 가져오기
+            self.minimum_independent_line_num = 1000000000
+            self.simulation_independent_line(0,simul_line_set)
+
+            # 독립선분 최소 case에서 convexhull 위의 선분이 아닌 것을 선택 (일단 convec hull 은 보류 --> 주석처리)
+            max_length, longest_element = min([(len(x),x) for x in self.independent_lines_case])
+            for line in longest_element:
+                if line in self.drawn_lines:
+                    continue
+                else:
+                    print("return = ", line)
+                    print("independent line")
+                    return line
+
+        elif len(self.posible_lines) > 10:    # game 전략 1 : 가능한 선분 수가 10개 이상이면 1) 삼각형 check 2) 독립선분 긋기 3) min-max
             #삼각형을 만드는 경우가 생기면 무조건 그 선을 우선적으로 그음.
             max_value = 0
             best_line = self.posible_lines[0]
@@ -471,7 +487,13 @@ class MACHINE():
             temp_line = [point1, point2]
             if self.check_temp_availability(simul_line_set, temp_line):
                 posible_lines.append(temp_line)
-        
+
+        #posible_lines의 수에 따라서 생성할 child 노드 수 정하기 
+        if len(posible_lines) > 10:
+            num_of_child_node = 2
+        else:
+            num_of_child_node = 3
+
         #각각 가능한 선분에 대해 heuristic 값 구하기 
         # h(x) = getScore(x) - nextTriangle(x)
         for next_line in posible_lines:
@@ -495,7 +517,6 @@ class MACHINE():
             #print("next_line = ", next_line, " h_x = ", h_x)
 
         
-        num_of_child_node = 5
         # for i in range(num_of_child_node):
         #     max_value = [-1000000, [[0,0],[0,1]]]
         #     for candidate in evalueted_lines_value:
@@ -505,7 +526,7 @@ class MACHINE():
         #    return_next_lines.append(max_value[0])
         
         evalueted_lines_value.sort()
-        print("evalueted_lines_value ", evalueted_lines_value)
+        #print("evalueted_lines_value ", evalueted_lines_value)
         if(len(evalueted_lines_value) < num_of_child_node):
             for element in evalueted_lines_value:
                 return_next_lines.append(element[1])
@@ -515,7 +536,7 @@ class MACHINE():
             
     
 
-        print("candidate of node", return_next_lines)
+        #print("candidate of node", return_next_lines)
         return return_next_lines
 
     # 현재 내가 긋는 선분이 몇개의 삼각형을 만드는지를 return 하는 function 
