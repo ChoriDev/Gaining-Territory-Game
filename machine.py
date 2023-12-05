@@ -90,12 +90,15 @@ class MACHINE():
                                 print("independent line")
                                 return [line[0], line[1]]
                         else:
-                            if line[0] in convex_points and line[1] in convex_points:
-                                continue
-                            else:
-                                print("return = ", line)
-                                print("independent line")
-                                return [line[0], line[1]]
+                            # if line[0] in convex_points and line[1] in convex_points:
+                            #     continue
+                            # else:
+                            #     print("return = ", line)
+                            #     print("independent line")
+                            #     return [line[0], line[1]]
+                            print("return = ", line)
+                            print("independent line")
+                            return [line[0], line[1]]
         
         # 독립선분이 포화 상태일 때 min-max 적용
         simul_line_set = self.drawn_lines
@@ -112,8 +115,8 @@ class MACHINE():
     def simulation_independent_line(self, i, simul_line_set):
         #print(i)
 
-        # 독립변수 case 조사하는 개수 제한... 20까지 했는데 최적의 수가 21번째 나오면 답 없음... 타협 필요
-        if len(self.independent_lines_case) == 20:
+        # 독립변수 case 조사하는 개수 제한... 12까지 했는데 최적의 수가 21번째 나오면 답 없음... 타협 필요
+        if len(self.independent_lines_case) == 12:
             return
 
         # 독립변수 case 조사할 때, 선분 수가 가장 적은 case 보다 simulation set이 많아지면 즉시 종료
@@ -345,7 +348,7 @@ class MACHINE():
             #print("simul_line_set = ", simul_line_set)
             #print("evaluation_value = ", evaluation_value)
             return evaluation_value
-        elif depth > 10:
+        elif depth > 5:
             return evaluation_value
         else:
             next_lines = self.GenerateMove(simul_line_set) #line list를 반환
@@ -384,7 +387,7 @@ class MACHINE():
             #print("simul_line_set = ", simul_line_set)
             #print("evaluation_value = ", evaluation_value)
             return evaluation_value
-        elif depth > 10:
+        elif depth > 5:
             return evaluation_value
         else:
             next_lines = self.GenerateMove(simul_line_set) #line list를 반환
@@ -497,7 +500,7 @@ class MACHINE():
         #     num_of_child_node = 2
         # else:
         #     num_of_child_node = 5
-        num_of_child_node = 5
+        num_of_child_node = 3
 
         #각각 가능한 선분에 대해 heuristic 값 구하기 
         # h(x) = getScore(x) - nextTriangle(x)
